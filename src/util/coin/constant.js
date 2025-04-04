@@ -10,3 +10,9 @@ export const FACTORY_ABI = new Interface(factoryJson).format(true);
 export const TOKEN_ABI = new Interface(tokenJson).format(true);
 
 export const BOND_ABI = new Interface(bondJson).format(true);
+
+export const CHAIN_ID = '0xAA36A7';
+
+export const CHAIN_NAME = 'Sepolia';
+
+export const RPC_URLS = ['https://sepolia.infura.io/v3/6dd6664a59ab4faea5ac270b3403ea98'];

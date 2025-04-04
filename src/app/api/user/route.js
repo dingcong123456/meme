@@ -17,7 +17,6 @@ export async function GET() {
 
 export async function PUT(req) {
   const { username, address, bio } = await req.json();
-  console.log(username, address, bio );
 
   if (!username || !address) {
     return NextResponse.json({ message: 'No username or not connected wallet!'}, { status: 400 });

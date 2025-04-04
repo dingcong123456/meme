@@ -97,6 +97,7 @@ const TradingChart = ({ tokenAddress }) => {
   }, [isFullscreen]);
 
   useEffect(() => {
+    if (!tokenAddress) return;
     fetchChartData();
   }, [tokenAddress]);
 
@@ -213,7 +214,7 @@ const TradingChart = ({ tokenAddress }) => {
     window.addEventListener('resize', handleResize);
 
     const realTime = localStorage.getItem('realTime');
-    setRealTime(realTime === null ? true : JSON.parse(realTime));
+    setRealTime(realTime === undefined ? true : JSON.parse(realTime));
 
     return () => {
       window.removeEventListener('resize', handleResize);

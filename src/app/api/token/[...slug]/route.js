@@ -1,6 +1,7 @@
-import { findToken, updateToken, remoteToken } from '@/services/token';
+import { findToken, updateToken } from '@/services/token';
 import { NextResponse } from 'next/server';
 import { getTokenMarket } from '../route';
+import { deleteToken } from '@/request/token';
 
 export async function GET(req, { params }) {
   const { slug } = await params;
@@ -49,7 +50,7 @@ export async function DELETE(req, { params }) {
 
   try {
     // TODO: 检查合约是否存在上链，如果上链则不允许删除
-    await remoteToken(tokenId);
+    await deleteToken(tokenId);
     return NextResponse.json({ message: 'Token deleted successfully!' });
   } catch (error) {
     return NextResponse.json({ message: 'Failed to delete token!' }, { status: 500 });

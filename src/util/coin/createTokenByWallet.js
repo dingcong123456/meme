@@ -1,13 +1,17 @@
+import { checkChain } from '@/lib/chain';
 import { FACTORY_ADDRESS, FACTORY_ABI } from './constant';
 import { ethers, parseEther } from 'ethers';
 
 export const createTokenByWallet = async (address, { name, ticker }) => {
-  const provider = new ethers.BrowserProvider(window.ethereum);
   try {
+    const provider = await checkChain();
+    if (!provider) {
+      return false;
+    }
     const signer = await provider.getSigner(address);
     const factory = new ethers.Contract(FACTORY_ADDRESS, FACTORY_ABI, signer);
-  console.log(name,ticker,11);
-    const tx = await factory.createToken(name, String(ticker), {
+
+    const tx = await factory.createToken(name, ticker, {
       value: parseEther('0.002'),
       gasLimit: 3000000
     });
@@ -63,3 +67,4 @@ const parseSingleData = (data, type) => {
     bondAddress: ''
   };
 };
+

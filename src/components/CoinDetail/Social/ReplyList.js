@@ -19,8 +19,7 @@ const ReplyItemList = ({ tokenId }) => {
     try {
       setLoading(true);
       const res = await getCommentList(tokenId, { take: pageSize, skip: (page - 1) * pageSize });
-      console.log(res);
-      setDataSource((prev) => [...prev, ...(res?.data || [])]);
+      setDataSource(res?.data || []);
       setTotal(res?.total || 0);
     } catch {
       // do nothing

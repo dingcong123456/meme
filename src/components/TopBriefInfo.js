@@ -55,7 +55,7 @@ const TopBriefInfo = ({ record, tokenCount }) => {
       </div>
       <div className='flex flex-wrap items-center gap-2 text-green-300'>
         <span>
-          market cap: {marketCap}
+          market cap: {marketCap || 0.00}
         </span>
       </div>
       <div className='flex flex-shrink-0 items-center gap-1 text-[#9DA3AE]'>

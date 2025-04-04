@@ -1,6 +1,6 @@
-import { SingleCoinCard } from '@/app/page';
+import { SingleCoinCard } from '@/app/(user)/home/page';
 import { getTokenList } from '@/request/token';
-import { Empty } from 'antd';
+import { Empty, Pagination } from 'antd';
 import { Spin } from 'antd';
 import { useEffect, useState } from 'react';
 
@@ -17,7 +17,6 @@ const CreateCoinList = ({ address, logoPrefix }) => {
     try {
       setLoading(true);
       const res = await getTokenList({ pageNo: page, address });
-      console.log(123, res);
       setDataSource(res?.data || []);
       setTotal(res?.total || 0);
     } catch {
@@ -76,6 +75,17 @@ const CreateCoinList = ({ address, logoPrefix }) => {
       <Spin spinning={loading}>
         <div>
           {generateMainContent()}
+          {
+            total > 0 ? (
+              <Pagination
+                current={pageNo}
+                total={total}
+                onChange={(page) => setPageNo(page)}
+                size='small'
+                showSizeChanger={false}
+              />
+            ) : null
+          }
         </div>
       </Spin>
     </div>

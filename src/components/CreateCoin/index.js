@@ -2,7 +2,6 @@
 
 import { GlobalContext } from '@/context/global';
 import { addToken } from '@/request/token';
-import { getBase64 } from '@/util/imgBase64';
 import { PlusOutlined } from '@ant-design/icons';
 import { Form, Input, Button, Upload, Image } from 'antd';
 import { useContext, useEffect, useState } from 'react';
@@ -36,13 +35,14 @@ const CreateCoin = () => {
       to: (to || '').toLowerCase(),
       ...(extraData || {})
     };
+    console.log(obj);
     return obj;
   }
 
   const handleSubmit = async (values) => {
     try {
       setLoading(true);
-   
+      console.log(11, values);
       if (!user) {
         const result = await checkUser(true);
         if (!result) {
@@ -61,6 +61,7 @@ const CreateCoin = () => {
       Object.keys(tokenResult).forEach(key => {
         formData.append(key, tokenResult[key]);
       });
+      console.log(formData);
       const newToken = await addToken(formData);
       if (newToken) {
         router.push(`/coin/${newToken.tokenId}`);

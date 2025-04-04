@@ -15,11 +15,7 @@ const GlobalProvider = ({ serverValue, children }) => {
   const [user, setUser] = useState(null);
   const [address, setAddress] = useState(null);
   const [showUserForm, setShowUserForm] = useState(false);
-  const protocol = new URL(import.meta.url).protocol;
-  console.log(protocol,1111111);
-  const { onSocket, offSocket, sendMessage } = useWebSocket(
-    `ws${protocol === 'https:' ? 's' : 's'}://${serverValue.urlInfo.socketHost}/chain`
-  );
+  const { onSocket, offSocket, sendMessage } = useWebSocket(`ws://${serverValue.urlInfo.socketHost}/chain`);
 
   const [okbPrice, setOkbPrice] = useState(null);
 

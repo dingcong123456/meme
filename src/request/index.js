@@ -1,5 +1,9 @@
 
 const fetchData = async (url, options = {}) => {
+	const { includeCredential } = options;
+	if (!options.headers) {
+		options.headers = {};
+	}
 	if (options.method !== 'GET') {
 		options.headers = {
 			'Content-Type': 'application/json',
@@ -18,6 +22,9 @@ const fetchData = async (url, options = {}) => {
 			url += '?' + params.toString();
 		}
 		delete options.params;
+	}
+	if (includeCredential) {
+		options.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
 	}
 	try {
 		const response = await fetch(url, options);

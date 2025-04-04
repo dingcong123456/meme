@@ -43,3 +43,17 @@ export const parseBitInt = (numStr) => {
     value: str
   };
 }
+
+export const copyText = async(content) => {
+  if (navigator.clipboard && window.isSecureContext) {
+    await navigator.clipboard.writeText(content);
+  } else {
+    const textArea = document.createElement('textarea');
+    textArea.value = content;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+  }
+};

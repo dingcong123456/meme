@@ -16,6 +16,7 @@ export const findToken = async(tokenId) => {
         telegram: true,
         weblink: true,
         twitter: true,
+        image: true,
         user: {
           select: {
             username: true,
@@ -84,6 +85,7 @@ export const findTokenList = async ({pageNo = 1, keyword, address}) => {
         name: true,
         ticker: true,
         tokenId: true,
+        image: true,
         user: {
           select: {
             username: true,
@@ -94,8 +96,7 @@ export const findTokenList = async ({pageNo = 1, keyword, address}) => {
       },
       skip: (pageNo - 1) * 20,
       take: 20,
-      where: queryObj,
-      orderBy: { createTime: 'desc' }
+      where: queryObj
     })
   ]);
 }

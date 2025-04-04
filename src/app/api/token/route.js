@@ -3,6 +3,7 @@ import {createToken, findTokenByTicker, findTokenList} from '@/services/token';
 import { BOND_ABI, FACTORY_ABI, FACTORY_ADDRESS, TOKEN_ABI } from '@/util/coin/constant';
 import { ethers, formatEther } from 'ethers';
 import { NextResponse } from 'next/server';
+import { v4 as uuidv4 } from 'uuid';
 
 export const getTokenMarket = async (tokenInfo) => {
   try {
@@ -87,12 +88,14 @@ export async function PUT(req) {
 
   data.bondAddress = bondAddress;
 
-  const imageUrl = await uploadImage(`${process.env.TOKEN_LOGO}/${data.ticker}`, image);
+  const imageId = uuidv4();
+
+  const imageUrl = await uploadImage(`${process.env.TOKEN_LOGO}/${imageId}`, image);
   if (imageUrl.error) {
     // return NextResponse.json({ message: imageUrl.error.message || 'Image upload failed!' }, { status: 500 });
     data.image = '';
   } else {
-    data.image = JSON.stringify(imageUrl.data);
+    data.image = imageId;
   }
 
 
