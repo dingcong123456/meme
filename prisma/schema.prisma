@@ -1,0 +1,155 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["darwin-arm64", "windows", "debian-openssl-3.0.x","darwin"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userId     String      @id @default(nanoid()) @map("user_id")
+  address    String      @unique
+  username   String
+  bio        String?
+  createTime DateTime    @default(now()) @map("create_time")
+  updateTime DateTime    @updatedAt @map("update_time")
+  comment    Comment[]
+  token      Token[]
+  userToken  UserToken[]
+
+  @@map("user")
+}
+
+model Token {
+  tokenId                    String                       @id @default(nanoid()) @map("token_id")
+  userId                     String                       @map("user_id")
+  name                       String
+  ticker                     String                       @unique
+  image                      String
+  description                String
+  telegram                   String?
+  weblink                    String?
+  twitter                    String?
+  tokenInfo                  String?                      @map("token_info")
+  createTime                 DateTime                     @default(now()) @map("create_time")
+  updateTime                 DateTime                     @updatedAt @map("update_time")
+  decimals                   String?
+  fee                        String?
+  from                       String?
+  gasPrice                   String?                      @map("gas_price")
+  gasUsed                    String?                      @map("gas_used")
+  to                         String?
+  address                    String?                      @unique
+  bondAddress                String?                      @map("bond_address")
+  comment                    Comment[]
+  user                       User                         @relation(fields: [userId], references: [userId])
+  transaction                Transaction[]
+  userToken                  UserToken[]
+  tokenTransactionStatistics TokenTransactionStatistics[]
+
+  @@map("token")
+}
+
+model Transaction {
+  transactionId String   @id @default(nanoid()) @map("transaction_id")
+  tokenAmount   String?  @map("token_amount")
+  timestamp     DateTime @default(now())
+  currentPrice  String?  @map("current_price")
+  fee           String?
+  gasPrice      String?  @map("gas_price")
+  gasUsed       String?  @map("gas_used")
+  to            String?  @map("to")
+  address       String
+  amount        String?  @map("amount")
+  hoster        String?
+  type          Int?
+  token         Token    @relation(fields: [address], references: [address])
+
+  @@map("transaction")
+}
+
+model UserToken {
+  userTokenId String   @id @default(nanoid()) @map("user_token_id")
+  userId      String   @map("user_id")
+  tokenId     String   @map("token_id")
+  amount      Int      @default(0)
+  createTime  DateTime @default(now()) @map("create_time")
+  updateTime  DateTime @updatedAt @map("update_time")
+  token       Token    @relation(fields: [tokenId], references: [tokenId])
+  user        User     @relation(fields: [userId], references: [userId])
+
+  @@map("user_token")
+}
+
+model PriceHistory {
+  priceHistoryId String   @id @default(nanoid()) @map("price_history_id")
+  tokenAddress   String   @map("token_address")
+  originPrice    BigInt   @map("origin_price")
+  formattedPrice String   @map("formatted_price")
+  timestamp      DateTime @default(now())
+
+  @@map("price_history")
+}
+
+model PriceStatistics {
+  priceStatisticsId String   @id @default(nanoid()) @map("price_statistics_id")
+  tokenAddress      String   @map("token_address")
+  minPrice          BigInt   @map("min_price")
+  maxPrice          BigInt   @map("max_price")
+  startPrice        BigInt   @map("start_price")
+  endPrice          BigInt   @map("end_price")
+  timestamp         DateTime
+
+  @@map("price_statistics")
+}
+
+model Comment {
+  commentId  String    @id @default(nanoid()) @map("comment_id")
+  userId     String    @map("user_id")
+  tokenId    String    @map("token_id")
+  text       String
+  image      String?
+  createTime DateTime  @default(now()) @map("create_time")
+  replyToId  String?   @map("reply_to_id")
+  replyTo    Comment?  @relation("CommentReplies", fields: [replyToId], references: [commentId], onDelete: Cascade)
+  replies    Comment[] @relation("CommentReplies")
+  token      Token     @relation(fields: [tokenId], references: [tokenId])
+  user       User      @relation(fields: [userId], references: [userId])
+
+  @@map("comment")
+}
+
+model TokenTransaction {
+  id           String   @id @default(nanoid()) @map("id")
+  type         Int? // 0: sell, 1: buy
+  address      String?
+  hash         String?  @unique
+  userId       String?  @map("user_id")
+  amount       String?  @map("amount")
+  tokenAmount  String?  @map("token_amount")
+  timestamp    DateTime @default(now())
+  tokenAddress String?
+
+  @@map("token_transaction")
+}
+
+model TokenTransactionStatistics {
+  id           String @id @default(nanoid()) @map("id")
+  tokenAddress String @unique() @map("token_address")
+
+  sellTotalAmount      String @map("sell_total_amount")
+  sellTotalTokenAmount String @map("sell_total_token_amount")
+  sellCount            String @map("sell_count")
+
+  buyTotalAmount      String @map("buy_total_amount")
+  buyTotalTokenAmount String @map("buy_total_token_amount")
+  buyCount            String @map("buy_count")
+
+  lastUpdated DateTime @updatedAt @map("last_updated")
+
+  token Token @relation(fields: [tokenAddress], references: [address])
+
+  @@map("token_transaction_statistics")
+}

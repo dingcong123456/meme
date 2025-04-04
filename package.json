@@ -1,0 +1,40 @@
+{
+  "name": "meme-dapp",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "gen": "npx prisma generate",
+    "mig": "npx prisma migrate dev --name init",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@ant-design/cssinjs": "^1.23.0",
+    "@ant-design/icons": "^5.6.1",
+    "@ant-design/nextjs-registry": "^1.0.2",
+    "@prisma/client": "6.4.1",
+    "@prisma/extension-accelerate": "^1.2.2",
+    "@supabase/supabase-js": "^2.49.1",
+    "antd": "^5.24.3",
+    "clsx": "^2.1.1",
+    "dayjs": "^1.11.13",
+    "ethers": "^6.13.5",
+    "lightweight-charts": "^5.0.3",
+    "next": "15.2.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-infinite-scroll-component": "^6.1.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4.0.12",
+    "eslint": "^9",
+    "eslint-config-next": "15.2.1",
+    "prisma": "^6.4.1",
+    "tailwindcss": "^4.0.12"
+  },
+  "packageManager": "pnpm@9.14.1+sha512.7f1de9cffea40ff4594c48a94776112a0db325e81fb18a9400362ff7b7247f4fbd76c3011611c9f8ac58743c3dc526017894e07948de9b72052f874ee2edfdcd"
+}
