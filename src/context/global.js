@@ -17,7 +17,7 @@ const GlobalProvider = ({ serverValue, children }) => {
   const [showUserForm, setShowUserForm] = useState(false);
   const protocol = new URL(import.meta.url).protocol;
   const { onSocket, offSocket, sendMessage } = useWebSocket(
-    `ws${protocol === 'https:' ? 's' : ''}://${serverValue.urlInfo.socketHost}/chain`
+    `ws${protocol === 'https:' ? 's' : 's'}://${serverValue.urlInfo.socketHost}/chain`
   );
 
   const [okbPrice, setOkbPrice] = useState(null);
