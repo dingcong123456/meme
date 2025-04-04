@@ -15,7 +15,7 @@ const GlobalProvider = ({ serverValue, children }) => {
   const [user, setUser] = useState(null);
   const [address, setAddress] = useState(null);
   const [showUserForm, setShowUserForm] = useState(false);
-  const { onSocket, offSocket, sendMessage } = useWebSocket(`ws://${serverValue.urlInfo.socketHost}/chain`);
+  const { onSocket, offSocket, sendMessage } = useWebSocket(`wss://${serverValue.urlInfo.socketHost}/chain`);
 
   const [okbPrice, setOkbPrice] = useState(null);
 
