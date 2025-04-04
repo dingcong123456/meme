@@ -80,7 +80,8 @@ const AdminDashboard = () => {
   if (loading > 0) {
     return (
       <div
-        className='flex items-center justify-center h-full bg-black'
+        className='flex items-center justify-center h-full'
+        style={{ background: '#1B1D27' }}
       >
         <Spin
         >

@@ -8,6 +8,7 @@ import { Button } from 'antd';
 import ReplyFormModal from './ReplyForm';
 import { addComment } from '@/request/token';
 import { v4 as uuidv4 } from 'uuid';
+import './social.css'
 
 const ReplyList = ({ record }) => {
   const { address, name, ticker, user, tokenId } = record || {};
@@ -27,10 +28,11 @@ const ReplyList = ({ record }) => {
 
   return (
     <div className='mb-4'>
-      <div className='py-2 mb-4'>
+      <div className='py-2 mb-2'>
         <Button
           type='primary'
           size='small'
+          className="text-black"
           onClick={() => setReplyModalVisible(true)}
         >
           Post a reply
@@ -63,6 +65,7 @@ const CreatedInfoCard = ({ record }) => {
           className='h-4 w-4 rounded-full'
         />
         <Link
+          className="social-username"
           href={`/profile/${use?.address}`}
         >
           {user?.username}(dev)

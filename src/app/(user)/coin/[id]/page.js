@@ -125,7 +125,7 @@ const RightTokenBrief = ({ record }) => {
         />
       </div>
       <div className='flex-1'>
-        <div className='text-sm font-bold'>
+        <div className='text-sm font-bold text-gray-400'>
           <span>
             {name}({ticker})
           </span>

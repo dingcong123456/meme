@@ -126,7 +126,7 @@ const TradingChart = ({ tokenAddress }) => {
       layout: {
         background: {
           type: ColorType.Solid,
-          color: '#000000'
+          color: '#1B1D27'
         },
         width: '100%',
         textColor: '#eeeeee',

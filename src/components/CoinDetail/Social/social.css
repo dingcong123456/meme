@@ -1,0 +1,28 @@
+.social-username {
+  background: rgb(198, 138, 231);
+  color: black;
+  padding-left: .25rem;
+  padding-right: .25rem;
+  border-radius: .25rem;
+  display: flex;
+  gap: .25rem;
+}
+.social-tabs {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: 16px;
+  margin-bottom: .4rem;
+}
+
+.social-tabs .social-tab {
+  color: rgb(107, 114, 128);
+  padding-left: .25rem;
+  padding-right: .25rem;
+  border-radius: .25rem;
+  cursor: pointer;
+}
+.social-tab.active {
+  background: rgb(134, 239, 172);
+  color: black;
+}

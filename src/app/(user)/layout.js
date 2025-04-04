@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
         className={`antialiased`}
       >
         <GlobalProvider serverValue={{ urlInfo }}>
-          <div className='h-full w-full flex flex-col'>
+          <div className='h-full w-full flex flex-col overflow-auto' style={{ background: '#1B1D27' }}>
             <NavHeader />
             {children}
           </div>

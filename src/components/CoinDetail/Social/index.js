@@ -3,6 +3,7 @@ import { Tabs } from 'antd';
 import { useState } from 'react';
 import TradingList from './TradingList';
 import ReplyList from './Reply';
+import './social.css'
 
 const tabItems = [
   {
@@ -37,11 +38,10 @@ const CoinDetailSocialTab = ({record}) => {
 
   return (
     <div>
-      <Tabs
-        items={tabItems}
-        activeKey={activeTab}
-        onChange={setActiveTab}
-      />
+      <div className="social-tabs">
+        <div onClick={() => setActiveTab('thread')} className={`social-tab ${activeTab === 'thread' ? 'active' : ''}`}>thread</div>
+        <div onClick={() => setActiveTab('trades')} className={`social-tab ${activeTab === 'trades' ? 'active' : ''}`}>trades</div>
+      </div>
       <div>
         {generateMainContent()}
       </div>
