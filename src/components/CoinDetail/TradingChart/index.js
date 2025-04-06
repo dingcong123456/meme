@@ -41,7 +41,6 @@ const TradingChart = ({ tokenAddress }) => {
   };
 
   const fetchChartData = async (dateRange) => {
-    console.warn('fetchChartData', user)
     const date = dayjs();
     const data = dateRange || {startTime: date.subtract(5, 'd').startOf('d').valueOf(), endTime: date.endOf('d').valueOf()};
     socket.send(JSON.stringify({
@@ -58,11 +57,11 @@ const TradingChart = ({ tokenAddress }) => {
     socket.onopen = () => {
       console.log('WebSocket Connected');
       fetchChartData();
-      setInterval(() => {
-        socket.send(JSON.stringify({
-          type: 'heart'
-        }));
-      }, 5000)
+      // setInterval(() => {
+      //   socket.send(JSON.stringify({
+      //     type: 'heart'
+      //   }));
+      // }, 5000)
     };
     socket.onmessage = (event) => {
       let res = JSON.parse(event.data);
