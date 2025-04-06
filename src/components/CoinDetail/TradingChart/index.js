@@ -18,8 +18,10 @@ const INTERVAL_OPTIONS = [
   { label: '1h', key: '60' },
 ];
 
+let socket
+let isUserInit = false
 const TradingChart = ({ tokenAddress }) => {
-  const {onSocket, offSocket, sendMessage} = useContext(GlobalContext);
+  const {onSocket, offSocket, sendMessage, user} = useContext(GlobalContext);
   const containerRef = useRef();
   const chartRef = useRef();
   const seriesRef = useRef();
@@ -39,18 +41,43 @@ const TradingChart = ({ tokenAddress }) => {
   };
 
   const fetchChartData = async (dateRange) => {
+    console.warn('fetchChartData', user)
     const date = dayjs();
     const data = dateRange || {startTime: date.subtract(5, 'd').startOf('d').valueOf(), endTime: date.endOf('d').valueOf()};
-    try {
-      setLoading(true);
-      const res = await getTokenCahrtData(tokenAddress, data);
-      setInitData(res);
-      setLoading(false);
-    } catch (error) {
-      console.error('Failed to fetch chart data:', error);
-      setLoading(false);
-    }
+    socket.send(JSON.stringify({
+      type: 'chart',
+      data: {
+        tokenAddress,
+        ...data
+      }
+    }));
   };
+
+  const initWS = () => {
+    socket = new WebSocket(`ws://localhost:8100?userId=${user.userId}`);
+    socket.onopen = () => {
+      console.log('WebSocket Connected');
+      socket.send('Hello Server!');
+      setInterval(() => {
+        socket.send(JSON.stringify({
+          type: 'heart'
+        }));
+      }, 1000)
+    };
+    socket.onmessage = (event) => {
+      let res = JSON.parse(event.data);
+      res = res.map((item) => {
+        return {
+          time: dayjs(item.time).unix(),
+          open: Number(item.open),
+          high: Number(item.high),
+          low: Number(item.low),
+          close: Number(item.close),
+        };
+      });
+      setInitData(res);
+    };
+  }
 
   const staticData = (data, intv) => {
     if (intv === 1) return data;
@@ -100,6 +127,15 @@ const TradingChart = ({ tokenAddress }) => {
     if (!tokenAddress) return;
     fetchChartData();
   }, [tokenAddress]);
+
+  useEffect(() => {
+    console.log(user, 'lllllllll')
+    if (user && !socket && !isUserInit) {
+      console.warn('fffsadada')
+      isUserInit = true
+      initWS()
+    }
+  }, [user]);
 
   useEffect(() => {
     if (initData.length === 0 || !chartRef.current || !seriesRef.current) return;
@@ -252,6 +288,7 @@ const TradingChart = ({ tokenAddress }) => {
     chartRef.current.subscribeCrosshairMove(handleCrosshairMove);
 
     return () => {
+      socket?.close();
       chartRef.current.unsubscribeCrosshairMove(handleCrosshairMove);
     };
   }, []);

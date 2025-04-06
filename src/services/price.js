@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma';
+import prisma from '../lib/prisma.js';
 
 async function findPriceStatistics(tokenAddress, startTime, endTime) {
   console.log(tokenAddress, startTime, endTime);

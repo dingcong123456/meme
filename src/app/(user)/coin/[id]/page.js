@@ -13,7 +13,7 @@ import { copyText } from '@/util';
 
 const CoinDetailPage = ({ params }) => {
   const { id } = use(params);
-
+  const { user } = useContext(GlobalContext);
   const [loading, setLoading] = useState(false);
 
   const [tokenInfo, setTokenInfo] = useState(null);

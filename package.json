@@ -20,14 +20,19 @@
     "antd": "^5.24.3",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
+    "dotenv": "^16.4.7",
     "ethers": "^6.13.5",
+    "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "lightweight-charts": "^5.0.3",
     "next": "15.2.1",
+    "next-ws": "^2.0.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-infinite-scroll-component": "^6.1.0",
-    "uuid": "^11.1.0"
+    "shared": "^0.2.0",
+    "uuid": "^11.1.0",
+    "ws": "^8.18.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
