@@ -14,7 +14,10 @@ export const getTransactionList = async ({ pageNo, tokenAddress }) => {
     await prisma.tokenTransaction.findMany({
       where: queryObj,
       skip: (pageNo - 1) * 20,
-      take: 20
+      take: 20,
+      orderBy: {
+        timestamp: 'desc' // 按创建时间倒序排列
+      }
     })
   ]);
 };
