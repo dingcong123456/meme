@@ -1,7 +1,6 @@
 import prisma from '../lib/prisma.js';
 
 async function findPriceStatistics(tokenAddress, startTime, endTime) {
-  console.log(tokenAddress, startTime, endTime);
   return await prisma.priceStatistics.findMany({
     where: {
       tokenAddress,

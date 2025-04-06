@@ -57,12 +57,12 @@ const TradingChart = ({ tokenAddress }) => {
     socket = new WebSocket(`ws://localhost:8100?userId=${user.userId}`);
     socket.onopen = () => {
       console.log('WebSocket Connected');
-      socket.send('Hello Server!');
+      fetchChartData();
       setInterval(() => {
         socket.send(JSON.stringify({
           type: 'heart'
         }));
-      }, 1000)
+      }, 5000)
     };
     socket.onmessage = (event) => {
       let res = JSON.parse(event.data);
@@ -124,18 +124,11 @@ const TradingChart = ({ tokenAddress }) => {
   }, [isFullscreen]);
 
   useEffect(() => {
-    if (!tokenAddress) return;
-    fetchChartData();
-  }, [tokenAddress]);
-
-  useEffect(() => {
-    console.log(user, 'lllllllll')
     if (user && !socket && !isUserInit) {
-      console.warn('fffsadada')
       isUserInit = true
       initWS()
     }
-  }, [user]);
+  }, [user, tokenAddress]);
 
   useEffect(() => {
     if (initData.length === 0 || !chartRef.current || !seriesRef.current) return;
@@ -254,8 +247,10 @@ const TradingChart = ({ tokenAddress }) => {
 
     return () => {
       window.removeEventListener('resize', handleResize);
-
       chart.remove();
+      if (process.env.NODE_ENV === 'production') {
+        socket?.close();
+      }
     };
   }, []);
 
@@ -288,7 +283,7 @@ const TradingChart = ({ tokenAddress }) => {
     chartRef.current.subscribeCrosshairMove(handleCrosshairMove);
 
     return () => {
-      socket?.close();
+      // socket?.close()
       chartRef.current.unsubscribeCrosshairMove(handleCrosshairMove);
     };
   }, []);

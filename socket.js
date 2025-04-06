@@ -8,6 +8,7 @@ const app = express();
 const server = createServer(app);
 const wss = new Server({ server });
 const userConnections = new Map();
+const userInterval = new Map();
 
 wss.on('connection', (ws, req) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
@@ -21,16 +22,25 @@ wss.on('connection', (ws, req) => {
 
   ws.on('message', (message) => {
     console.log('received: %s', message);
+    const msg = JSON.parse(message);
+    if (msg.type === 'chart') {
+      const { tokenAddress, startTime, endTime } = msg.data
+      sendPeriodicMessages(userId, tokenAddress, startTime, endTime);
+      if (userInterval.has(userId)) {
+        clearInterval(userInterval.get(userId));
+      }
+      userInterval.set(userId, setInterval(() => {
+        sendPeriodicMessages(userId, tokenAddress, startTime, endTime);
+      }, 3000))
+    }
   });
 
   ws.on('close', () => {
     console.log(`用户 ${userId} 已断开连接`);
+    clearInterval(userInterval.get(userId));
     userConnections.delete(userId); // 从映射表中移除
+    userInterval.delete(userId); // 从映射表中移除
   });
-  // sendPeriodicMessages(userId, tokenAddress, startTime, endTime);
-  // setInterval(() => {
-  //   sendPeriodicMessages(userId, tokenAddress, startTime, endTime);
-  // }, 3000)
 });
 
 server.listen(8100, () => {
