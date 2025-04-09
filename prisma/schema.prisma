@@ -80,6 +80,7 @@ model UserToken {
   token       Token    @relation(fields: [tokenId], references: [tokenId])
   user        User     @relation(fields: [userId], references: [userId])
 
+  @@unique([userId, tokenId])
   @@map("user_token")
 }
 
