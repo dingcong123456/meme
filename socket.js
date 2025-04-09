@@ -31,7 +31,7 @@ wss.on('connection', (ws, req) => {
       }
       userInterval.set(userId, setInterval(() => {
         sendPeriodicMessages(userId, tokenAddress, startTime, endTime);
-      }, 3000))
+      }, 5000))
     }
   });
 

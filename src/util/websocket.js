@@ -6,6 +6,12 @@ function useWebSocket(url) {
   const [isConnect, setIsConnect] = useState(false);
 
   useEffect(() => {
+    return () => {
+      ws.current?.close();
+    };
+  }, []);
+
+  const initSocket = (url) => {
     if (!url) {
       return;
     }
@@ -32,11 +38,7 @@ function useWebSocket(url) {
       setIsConnect(false);
       console.error('WebSocket error:', err);
     };
-
-    return () => {
-      ws.current.close();
-    };
-  }, [url]);
+  }
 
   const onSocket = (event, handler) => {
     if (!eventMap.current.has(event)) {
@@ -71,7 +73,7 @@ function useWebSocket(url) {
     ws.current?.send(JSON.stringify({ event, data }));
   }
 
-  return { onSocket, offSocket, sendMessage };
+  return { onSocket, offSocket, sendMessage, initSocket };
 }
 
 export default useWebSocket;

@@ -15,7 +15,7 @@ const GlobalProvider = ({ serverValue, children }) => {
   const [user, setUser] = useState(null);
   const [address, setAddress] = useState(null);
   const [showUserForm, setShowUserForm] = useState(false);
-  const { onSocket, offSocket, sendMessage } = useWebSocket(`wss://${serverValue.urlInfo.socketHost}/chain`);
+  const { onSocket, offSocket, sendMessage, initSocket } = useWebSocket();
 
   const [okbPrice, setOkbPrice] = useState(null);
 
@@ -30,6 +30,7 @@ const GlobalProvider = ({ serverValue, children }) => {
   const fetchUser = useCallback(async (address) => {
     const res = await getUser(address);
     setUser(res);
+    initSocket(`${serverValue.urlInfo.socketHost}/chain?userId=${res.userId}`);
     return res;
   }, []);
 
