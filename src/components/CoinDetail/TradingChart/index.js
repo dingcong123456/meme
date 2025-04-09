@@ -8,6 +8,7 @@ import {GlobalContext} from '@/context/global';
 import {DownOutlined, FullscreenOutlined, StopOutlined, FullscreenExitOutlined} from '@ant-design/icons';
 import { Dropdown, Spin, Button } from 'antd';
 import clsx from 'clsx';
+import {formatEther} from 'ethers';
 
 const INTERVAL_OPTIONS = [
   { label: '1m', key: '1' },
@@ -29,7 +30,7 @@ const TradingChart = ({ tokenAddress }) => {
   const [initData, setInitData] = useState([]);
   const [day, setDay] = useState(5);
   const [mode, setMode] = useState(0);
-  const [realTime, setRealTime] = useState(false);
+  const [realTime, setRealTime] = useState(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -40,16 +41,31 @@ const TradingChart = ({ tokenAddress }) => {
     setIsFullscreen(!isFullscreen);
   };
 
+  // const fetchChartData = async (dateRange) => {
+  //   const date = dayjs();
+  //   const data = dateRange || {startTime: date.subtract(5, 'd').startOf('d').valueOf(), endTime: date.endOf('d').valueOf()};
+  //   socket.send(JSON.stringify({
+  //     type: 'chart',
+  //     data: {
+  //       tokenAddress,
+  //       ...data
+  //     }
+  //   }));
+  // };
+
   const fetchChartData = async (dateRange) => {
+    if (!tokenAddress) return
     const date = dayjs();
     const data = dateRange || {startTime: date.subtract(5, 'd').startOf('d').valueOf(), endTime: date.endOf('d').valueOf()};
-    socket.send(JSON.stringify({
-      type: 'chart',
-      data: {
-        tokenAddress,
-        ...data
-      }
-    }));
+    try {
+      setLoading(true);
+      const res = await getTokenCahrtData(tokenAddress, data);
+      setInitData(res);
+      setLoading(false);
+    } catch (error) {
+      console.error('Failed to fetch chart data:', error);
+      setLoading(false);
+    }
   };
 
   const initWS = () => {
@@ -123,11 +139,14 @@ const TradingChart = ({ tokenAddress }) => {
   }, [isFullscreen]);
 
   useEffect(() => {
-    if (user && !socket && !isUserInit) {
-      isUserInit = true
-      initWS()
-    }
-  }, [user, tokenAddress]);
+    fetchChartData()
+  }, [tokenAddress]);
+  // useEffect(() => {
+  //   if (user && !socket && !isUserInit) {
+  //     isUserInit = true
+  //     initWS()
+  //   }
+  // }, [user, tokenAddress]);
 
   useEffect(() => {
     if (initData.length === 0 || !chartRef.current || !seriesRef.current) return;
@@ -247,6 +266,7 @@ const TradingChart = ({ tokenAddress }) => {
     return () => {
       window.removeEventListener('resize', handleResize);
       chart.remove();
+      unsubRealTime()
       if (process.env.NODE_ENV === 'production') {
         socket?.close();
       }
@@ -288,13 +308,14 @@ const TradingChart = ({ tokenAddress }) => {
   }, []);
 
   const listenRealTime = useCallback((item) => {
+    console.log('listenRealTime', item);
     if (item.tokenAddress === tokenAddress) {
       const d = {
         time: dayjs(item.timestamp || item.time).unix(),
-        open: Number(item.startPrice),
-        high: Number(item.maxPrice),
-        low: Number(item.minPrice),
-        close: Number(item.endPrice),
+        open: +formatEther(item.startPrice),
+        high: +formatEther(item.maxPrice),
+        low: +formatEther(item.minPrice),
+        close: +formatEther(item.endPrice),
       };
       seriesRef.current?.update(d);
       chartRef.current?.timeScale().scrollToRealTime();
@@ -314,12 +335,10 @@ const TradingChart = ({ tokenAddress }) => {
   }, [listenRealTime, offSocket, sendMessage, tokenAddress]);
 
   useEffect(() => {
+    if (realTime === null) return
     if (realTime) {
       subRealTime();
     } else {
-      unsubRealTime();
-    }
-    return () => {
       unsubRealTime();
     }
   }, [realTime, subRealTime, unsubRealTime]);

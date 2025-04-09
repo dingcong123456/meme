@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "price_statistics" ALTER COLUMN "min_price" SET DATA TYPE TEXT,
+ALTER COLUMN "max_price" SET DATA TYPE TEXT,
+ALTER COLUMN "start_price" SET DATA TYPE TEXT,
+ALTER COLUMN "end_price" SET DATA TYPE TEXT;

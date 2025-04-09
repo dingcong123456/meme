@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import fetchData from '.';
+import {formatEther} from 'ethers';
 
 export const getToken = (tokenId) => {
   return fetchData(`/api/token/${tokenId}`);
@@ -26,10 +27,10 @@ export const getTokenCahrtData = async (tokenAddress, data) => {
   return result.map((item) => {
     return {
       time: dayjs(item.time).unix(),
-      open: Number(item.open),
-      high: Number(item.high),
-      low: Number(item.low),
-      close: Number(item.close),
+      open: +formatEther(item.open),
+      high: +formatEther(item.high),
+      low: +formatEther(item.low),
+      close: +formatEther(item.close),
     };
   });
 };

@@ -4,7 +4,7 @@ import bondAbi from './bondAbi';
 import tokenAbi from './tokenAbiJson';
 
 export const TOKEN_FACTORY_ADDRESS =
-  '0x28a7743bD45cF21347836b91F9Fdc27Bfc3c8181';
+  '0x2Ff523E2a9900b42f955F682aE500F32823202F7';
 
 export const TOKEN_FACTORY_ABI = new Interface(factoryJson).format(true);
 

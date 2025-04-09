@@ -86,7 +86,7 @@ model UserToken {
 model PriceHistory {
   priceHistoryId String   @id @default(nanoid()) @map("price_history_id")
   tokenAddress   String   @map("token_address")
-  originPrice    BigInt   @map("origin_price")
+  originPrice    String   @map("origin_price")
   formattedPrice String   @map("formatted_price")
   timestamp      DateTime @default(now())
 
@@ -96,10 +96,10 @@ model PriceHistory {
 model PriceStatistics {
   priceStatisticsId String   @id @default(nanoid()) @map("price_statistics_id")
   tokenAddress      String   @map("token_address")
-  minPrice          BigInt   @map("min_price")
-  maxPrice          BigInt   @map("max_price")
-  startPrice        BigInt   @map("start_price")
-  endPrice          BigInt   @map("end_price")
+  minPrice          String   @map("min_price")
+  maxPrice          String   @map("max_price")
+  startPrice        String   @map("start_price")
+  endPrice          String   @map("end_price")
   timestamp         DateTime
 
   @@map("price_statistics")
