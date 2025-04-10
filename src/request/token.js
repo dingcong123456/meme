@@ -31,10 +31,11 @@ export const getTokenCahrtData = async (tokenAddress, data) => {
   return result.map((item) => {
     return {
       time: dayjs(item.time).unix(),
-      open: +formatEther(item.open),
-      high: +formatEther(item.high),
-      low: +formatEther(item.low),
-      close: +formatEther(item.close),
+      open: +item.open,
+      high: +item.high,
+      low: +item.low,
+      close: +item.close,
+      volume: +item.volume,
     };
   });
 };

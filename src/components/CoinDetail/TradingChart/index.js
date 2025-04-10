@@ -84,10 +84,11 @@ const TradingChart = ({ tokenAddress }) => {
       res = res.map((item) => {
         return {
           time: dayjs(item.time).unix(),
-          open: Number(item.open),
-          high: Number(item.high),
-          low: Number(item.low),
-          close: Number(item.close),
+          open: +item.open,
+          high: +item.high,
+          low: +item.low,
+          close: +item.close,
+          volume: +item.volume,
         };
       });
       setInitData(res);

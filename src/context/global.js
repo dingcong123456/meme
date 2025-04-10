@@ -30,7 +30,7 @@ const GlobalProvider = ({ serverValue, children }) => {
   const fetchUser = useCallback(async (address) => {
     const res = await getUser(address);
     setUser(res);
-    initSocket(`${serverValue.urlInfo.socketHost}/chain?userId=${res.userId}`);
+    res && initSocket(`${serverValue.urlInfo.socketHost}/chain?userId=${res.userId}`);
     return res;
   }, []);
 

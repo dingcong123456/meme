@@ -11,10 +11,11 @@ export async function POST(req, { params }) {
     const data = statistics.map((item) => {
       return {
         time: item.timestamp,
-        open: item.startPrice.toString(),
-        high: item.maxPrice.toString(),
-        low: item.minPrice.toString(),
-        close: item.endPrice.toString(),
+        open: item.startPrice,
+        high: item.maxPrice,
+        low: item.minPrice,
+        close: item.endPrice,
+        volume: item.volume,
       };
     });
     return NextResponse.json(data);
