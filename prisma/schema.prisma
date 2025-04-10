@@ -89,6 +89,7 @@ model PriceHistory {
   tokenAddress   String   @map("token_address")
   originPrice    String   @map("origin_price")
   formattedPrice String   @map("formatted_price")
+  amount         String   @map("amount")
   timestamp      DateTime @default(now())
 
   @@map("price_history")
@@ -101,6 +102,7 @@ model PriceStatistics {
   maxPrice          String   @map("max_price")
   startPrice        String   @map("start_price")
   endPrice          String   @map("end_price")
+  volume            String   @map("volume")
   timestamp         DateTime
 
   @@map("price_statistics")
