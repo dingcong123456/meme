@@ -5,7 +5,7 @@ import TransactionCard from '@/components/CoinDetail/TransactionCard';
 import Link from 'next/link';
 import CoinDetailSocialTab from '@/components/CoinDetail/Social';
 import { use, useContext, useEffect, useState } from 'react';
-import { getToken, getTokenCommentCount } from '@/request/token';
+import { getToken, getTokenCommentCount, apiGetHolders } from '@/request/token';
 import { Spin, App } from 'antd';
 import { GlobalContext } from '@/context/global';
 import { CopyOutlined, GlobalOutlined, XOutlined } from '@ant-design/icons';
@@ -15,6 +15,7 @@ const CoinDetailPage = ({ params }) => {
   const { id } = use(params);
   const { user } = useContext(GlobalContext);
   const [loading, setLoading] = useState(false);
+  const [holders, setHolders] = useState([]);
 
   const [tokenInfo, setTokenInfo] = useState(null);
 
@@ -41,10 +42,16 @@ const CoinDetailPage = ({ params }) => {
     }
   };
 
+  const getHolder = async () => {
+    const res = await apiGetHolders({ tokenId: id });
+    setHolders(res?.holders || [])
+  }
+
   useEffect(() => {
     if (id) {
       fetchTokenDetail(id);
       getCommentCounts(id);
+      getHolder()
     }
   }, [id]);
 
@@ -82,6 +89,17 @@ const CoinDetailPage = ({ params }) => {
           />
           <SocialLinks record={tokenInfo} />
           <CopyableAddress address={tokenInfo?.address} />
+          <div>
+            <div className="text-center">holder distribution</div>
+            <div className="overflow-auto max-h-[800px]">
+              {holders.map((k, i) => (
+                  <div className="flex items-center justify-between mt-2">
+                    <span>{i + 1}{k.user.username}</span>
+                    <span>{k.amount}</span>
+                  </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     );

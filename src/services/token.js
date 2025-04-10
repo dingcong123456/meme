@@ -107,14 +107,10 @@ export const remoteToken = (tokenId) => {
   });
 }
 
-export const findHolders = async (address) => {
-  const token = await prisma.token.findUnique({
-    where: { address },
-  });
-  if (!token) return [];
+export const findHolders = async (tokenId) => {
   const users = await prisma.userToken.findMany({
     where: {
-      tokenId: token.tokenId,
+      tokenId,
     },
     include: {
       user: true, // 加载关联的 User 数据

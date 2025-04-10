@@ -22,6 +22,10 @@ export const deleteToken = (tokenId) => {
   return fetchData(`/api/token/${tokenId}`, { method: 'DELETE' });
 }
 
+export const apiGetHolders = (params) => {
+  return fetchData(`/api/token/users`, { method: 'GET', params });
+}
+
 export const getTokenCahrtData = async (tokenAddress, data) => {
   const result = await fetchData(`/api/price/statistics/${tokenAddress}`, { method: 'POST', body: data });
   return result.map((item) => {
