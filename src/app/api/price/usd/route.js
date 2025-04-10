@@ -14,12 +14,9 @@ export async function GET() {
         'X-CMC_PRO_API_KEY': KEY,
       },
     });
-    console.log(KEY, res)
-    const data = await res.json();
-    return NextResponse.json(data);
     if (res.ok) {
       const data = await res.json();
-      return NextResponse.json(data.data.ETH.quote.USD.price);
+      return NextResponse.json(data?.data?.ETH?.quote?.USD?.price || 1);
     } else {
       return NextResponse.json(null);
     }
