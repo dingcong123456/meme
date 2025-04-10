@@ -19,8 +19,6 @@ const INTERVAL_OPTIONS = [
   { label: '1h', key: '60' },
 ];
 
-let socket
-let isUserInit = false
 const TradingChart = ({ tokenAddress }) => {
   const {onSocket, offSocket, sendMessage, user, okbPrice} = useContext(GlobalContext);
   const containerRef = useRef();
@@ -43,18 +41,6 @@ const TradingChart = ({ tokenAddress }) => {
     setIsFullscreen(!isFullscreen);
   };
 
-  // const fetchChartData = async (dateRange) => {
-  //   const date = dayjs();
-  //   const data = dateRange || {startTime: date.subtract(5, 'd').startOf('d').valueOf(), endTime: date.endOf('d').valueOf()};
-  //   socket.send(JSON.stringify({
-  //     type: 'chart',
-  //     data: {
-  //       tokenAddress,
-  //       ...data
-  //     }
-  //   }));
-  // };
-
   const fetchChartData = async (dateRange) => {
     if (!tokenAddress) return
     const date = dayjs();
@@ -76,33 +62,6 @@ const TradingChart = ({ tokenAddress }) => {
       setLoading(false);
     }
   };
-
-  const initWS = () => {
-    socket = new WebSocket(`ws://localhost:8100?userId=${user.userId}`);
-    socket.onopen = () => {
-      console.log('WebSocket Connected');
-      fetchChartData();
-      // setInterval(() => {
-      //   socket.send(JSON.stringify({
-      //     type: 'heart'
-      //   }));
-      // }, 5000)
-    };
-    socket.onmessage = (event) => {
-      let res = JSON.parse(event.data);
-      res = res.map((item) => {
-        return {
-          time: dayjs(item.time).unix(),
-          open: +item.open * rateUsd,
-          high: +item.high * rateUsd,
-          low: +item.low * rateUsd,
-          close: +item.close * rateUsd,
-          volume: +item.volume * rateUsd,
-        };
-      });
-      setInitData(res);
-    };
-  }
 
   const staticData = (data, intv) => {
     if (intv === 1) return data;
@@ -151,12 +110,6 @@ const TradingChart = ({ tokenAddress }) => {
   useEffect(() => {
     fetchChartData()
   }, [tokenAddress]);
-  // useEffect(() => {
-  //   if (user && !socket && !isUserInit) {
-  //     isUserInit = true
-  //     initWS()
-  //   }
-  // }, [user, tokenAddress]);
 
   useEffect(() => {
     if (initData.length === 0 || !chartRef.current || !seriesRef.current) return;
@@ -239,9 +192,10 @@ const TradingChart = ({ tokenAddress }) => {
       wickUpColor: '#26a69a',
       wickDownColor: '#ef5350',
       priceFormat: {
-        type: 'price',
-        precision: 3,
-        minMove: 1e-3,
+        type: 'custom',
+        formatter: (price) => {
+          return price.toFixed(9); // 保留 6 位小数
+        },
       },
       // autoscaleInfoProvider: original => {
       //   const res = original();
@@ -276,9 +230,6 @@ const TradingChart = ({ tokenAddress }) => {
       window.removeEventListener('resize', handleResize);
       chart.remove();
       unsubRealTime()
-      if (process.env.NODE_ENV === 'production') {
-        socket?.close();
-      }
     };
   }, []);
 
