@@ -37,7 +37,9 @@ const GlobalProvider = ({ serverValue, children }) => {
   const fetchOkbPrice = useCallback(async () => {
     try {
       const res = await getOkbPrice();
-      setOkbPrice(res?.okb?.usd);
+      if (res?.okb?.usd) {
+        setOkbPrice(res.okb.usd);
+      }
       priceTimer.current = setTimeout(fetchOkbPrice, 10 * 1000);
     } catch {
       // do nothing

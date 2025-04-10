@@ -22,10 +22,12 @@ const INTERVAL_OPTIONS = [
 let socket
 let isUserInit = false
 const TradingChart = ({ tokenAddress }) => {
-  const {onSocket, offSocket, sendMessage, user} = useContext(GlobalContext);
+  const {onSocket, offSocket, sendMessage, user, okbPrice} = useContext(GlobalContext);
   const containerRef = useRef();
   const chartRef = useRef();
   const seriesRef = useRef();
+  console.warn('okbPrice: ', okbPrice);
+  const rateUsd = okbPrice || 1
 
   const [initData, setInitData] = useState([]);
   const [day, setDay] = useState(5);
@@ -60,6 +62,13 @@ const TradingChart = ({ tokenAddress }) => {
     try {
       setLoading(true);
       const res = await getTokenCahrtData(tokenAddress, data);
+      res.forEach(r => {
+        r.open *= rateUsd
+        r.close *= rateUsd
+        r.high *= rateUsd
+        r.low *= rateUsd
+        r.volume *= rateUsd
+      })
       setInitData(res);
       setLoading(false);
     } catch (error) {
@@ -84,11 +93,11 @@ const TradingChart = ({ tokenAddress }) => {
       res = res.map((item) => {
         return {
           time: dayjs(item.time).unix(),
-          open: +item.open,
-          high: +item.high,
-          low: +item.low,
-          close: +item.close,
-          volume: +item.volume,
+          open: +item.open * rateUsd,
+          high: +item.high * rateUsd,
+          low: +item.low * rateUsd,
+          close: +item.close * rateUsd,
+          volume: +item.volume * rateUsd,
         };
       });
       setInitData(res);
