@@ -93,7 +93,7 @@ const CoinDetailPage = ({ params }) => {
             <div className="text-center">holder distribution</div>
             <div className="overflow-auto max-h-[800px]">
               {holders.map((k, i) => (
-                  <div className="flex items-center justify-between mt-2">
+                  <div className="flex items-center justify-between mt-2" key={k.userTokenId}>
                     <span>{i + 1}{k.user.username}</span>
                     <span>{k.amount}</span>
                   </div>

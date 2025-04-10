@@ -260,8 +260,7 @@ const TradingChart = ({ tokenAddress }) => {
     seriesRef.current = newSeries;
     window.addEventListener('resize', handleResize);
 
-    const realTime = localStorage.getItem('realTime');
-    setRealTime(realTime === undefined ? true : JSON.parse(realTime));
+    subRealTime();
 
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -334,15 +333,6 @@ const TradingChart = ({ tokenAddress }) => {
     offSocket('price', listenRealTime);
   }, [listenRealTime, offSocket, sendMessage, tokenAddress]);
 
-  useEffect(() => {
-    if (realTime === null) return
-    if (realTime) {
-      subRealTime();
-    } else {
-      unsubRealTime();
-    }
-  }, [realTime, subRealTime, unsubRealTime]);
-
   const currentInterval = useMemo(() => {
     return INTERVAL_OPTIONS.find(i => i.key === interval);
   }, [interval]);
@@ -412,7 +402,6 @@ const TradingChart = ({ tokenAddress }) => {
             type={realTime ? 'primary' : 'text'}
             onClick={() => {
               setRealTime(!realTime);
-              localStorage.setItem('realTime', !realTime);
             }}
             className='text-white p-2 rounded-md m-0'
           >
