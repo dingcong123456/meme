@@ -26,7 +26,7 @@ const TradingChart = ({ tokenAddress }) => {
   const containerRef = useRef();
   const chartRef = useRef();
   const seriesRef = useRef();
-  console.warn('okbPrice: ', okbPrice);
+  console.warn('okbPrice1: ', okbPrice);
   const rateUsd = okbPrice || 1
 
   const [initData, setInitData] = useState([]);
